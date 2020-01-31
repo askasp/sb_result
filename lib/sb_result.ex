@@ -4,6 +4,7 @@ defmodule SbResult do
       (fn ->
          case unquote(left) do
            {:ok, x} -> x |> unquote(right)
+           :error -> {:error, "empty error"}
            {:error, _} = expr -> expr
            nil -> {:error, "Nil was returned"}
          end
