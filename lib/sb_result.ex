@@ -6,7 +6,6 @@ defmodule SbResult do
            {:ok, x} -> x |> unquote(right)
            :error -> {:error, "empty error"}
            {:error, _} = expr -> expr
-           nil -> {:error, "Nil was returned"}
          end
        end).()
     end
@@ -15,8 +14,11 @@ defmodule SbResult do
   defmacro map(args, func) do
     quote do
       (fn ->
-         result = unquote(args) |> unquote(func)
-         {:ok, result}
+         unquote(args) |> unquote(func)
+         |> case do
+             nil -> {:error, "Was nil"}
+             result -> {:ok, result}
+             end
        end).()
     end
   end
